@@ -1,0 +1,63 @@
+
+                          FAST LOW MEMORY T-TRANSFORM
+
+  Copyright 2012 Niko Rebenich and Stephen Neville, University of Victoria.    
+  
+
+  CONTACT INFORMATION  
+
+     Niko Rebenich: niko@ece.uvic.ca
+        Department of Electrical and Computer Engineering,
+        University of Victoria, British Columbia, Canada.
+
+     Stephen Neville: sneville@ece.uvic.ca
+        Department of Electrical and Computer Engineering,
+        University of Victoria, British Columbia, Canada.
+  
+     The latest version of this software is available at 
+     http://www.t-codes.org.
+     
+
+  ABOUT THIS SOFTWARE
+   
+     This product includes software developed as part of Niko Rebenich's 
+     M.A.Sc. thesis at the Information Security and Privacy Research Lab 
+     at the University of Victoria, British Columbia, Canada
+     http://www.inspire.ece.uvic.ca.
+
+     The Fast Low Memory T-transform (flott) is used to compute the T-com-
+     plexity of a string. In addition, it allows to compute instantaneous
+     information rates and information distances between strings. 
+     Additionally to T-complexity, flott provides the information measures 
+     T-information and T-entropy as discussed in [1]. 
+
+     The T-transform algorithm is also known as T-decomposition algorithm and 
+     has its origin in coding theory, more precisely, the algorithm is used 
+     in the construction process of T-codes. T-codes were proposed by Mark 
+     Titchener in 1984 as prefix-free variable length codes.
+
+     In 1993 Mark Titchener first proposed the T-decomposition algorithm.
+     A 1995 implementation (tcalc [2]) by Titchener and Wackrow executes in 
+     O(n^2 logn) time on a random-access machine with logarithmic cost 
+     measure. Subsequently, Jia Yang and Ulrich Speidel published the Fast 
+     T-decomposition (ftd) in 2005 having O(n logn) time and space complexity
+     on a random-access machine with logarithmic cost measure [3,4]. The Fast 
+     Low Memory  T-transform's main improvement over the Fast  T-decomposition
+     algorithm is a lower overall memory usage.
+
+
+  REFERENCES
+
+     [1] M. R. Titchener, R. Nicolescu, L. Staiger, T. A. Gulliver, and 
+         U. Speidel. Deterministic complexity and entropy. Fundam. Inf., 
+         64:443461, July 2004.
+
+     [2] S. Wackrow and M. R. Titchener. tcalc.c, program code in C, GNU GPL.
+         [Online] http://tcode.auckland.ac.nz/~corpus/tcalc.c, 1993.
+
+     [3] J. Yang and U. Speidel. A T-decomposition algorithm with O(n logn) 
+         time and space complexity. In Proceedings. International Symposium on 
+         Information Theory (ISIT2005), pages 2327, 2005.
+
+     [4] J. Yang. Fast String Parsing and its Application in Information and
+         Similarity Measurement. PhD thesis, University of Auckland, 2005.
