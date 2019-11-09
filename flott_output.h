@@ -100,7 +100,7 @@ void flott_output_print_headers (const flott_object *op);
 int flott_output_nti_dist (flott_object *op);
 int flott_output_ntc_dist (flott_object *op);
 void flott_output_no_rate (flott_object *op);
-void flott_output_step (flott_object *op, const flott_uint level,
+void flott_output_step (flott_object *op, flott_token* cp_last, const flott_uint level,
                         const size_t cf_value, const size_t cp_start_offset,
                         const size_t cp_length, const size_t joined_cp_length,
                         const double t_complexity, int *terminate);

@@ -67,6 +67,7 @@ typedef struct flott_source flott_source;
 typedef struct flott_sequence flott_sequence;
 typedef struct flott_input flott_input;
 typedef struct flott_result flott_result;
+typedef struct flott_retain flott_retain;
 typedef struct flott_handler flott_handler;
 typedef struct flott_status flott_status;
 typedef struct flott_private flott_private;
@@ -81,7 +82,7 @@ typedef void (flott_destroy_handler) (const flott_object *);
 typedef void (flott_error_handler) (flott_object *, int *);
 typedef void (flott_message_handler) (flott_object *, flott_vlevel, int *);
 typedef void (flott_progress_handler) (const flott_object *, const float);
-typedef void (flott_step_handler) (flott_object *, const flott_uint,
+typedef void (flott_step_handler) (flott_object *, flott_token *, const flott_uint,
                                    const size_t, const size_t, const size_t,
                                    const size_t, const double, int *);
 /**
@@ -112,6 +113,14 @@ enum flott_storage_type
   FLOTT_DEV_FILE         = 1 << 4,  ///< read/write from/to file
   FLOTT_DEV_STDOUT       = 1 << 5,  ///< standard out
   FLOTT_DEV_STOP_SYMBOL  = 1 << 6   ///< stop symbol (future use -- not implemented yet)
+};
+
+struct flott_retain
+{
+  flott_uint copy_factor;
+  flott_uint offset;
+  flott_uint length;
+  double t_complexity;
 };
 
 struct flott_token
@@ -175,6 +184,7 @@ struct flott_input
 struct flott_result
 {
   flott_uint levels;
+  flott_uint tl_length;
   double t_complexity;
   double t_information;
   double t_entropy;
@@ -222,11 +232,12 @@ struct flott_object
     verbosity_level;        ///< verbosity level [0 - 5] (default = 0)
   flott_uint alphabet_size; ///< actual unique symbols found in input.
   void *user;               ///< pointer to custom user application data
-  flott_private private;    ///< private object data (do not touch please)
+  flott_private _private;   ///< private object data (do not touch please)
 };
 
 flott_object *flott_create_instance (size_t input_source_count);
 int flott_initialize (flott_object *op);
+void flott_t_transform_callback (flott_object *op);
 void flott_t_transform (flott_object *op);
 void flott_inverse_t_transform (flott_object *op);
 void flott_input_write (flott_object *op, size_t cp_start_offset,

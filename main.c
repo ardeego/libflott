@@ -270,7 +270,8 @@ int parse_command_line (flott_object *op,
                    break;
          case 'u': set_output_units (&(output->options), options.optarg);
                    break;
-         case 'g': set_int_argument(options.optarg, 0, 300, 2 /* default */);
+         case 'g': output->precision = set_int_argument(
+                    options.optarg, 0, 300, 2 /* default */);
                    break;
          case 'L': output->options |= FLOTT_OUT_HEADERS;
                    break;

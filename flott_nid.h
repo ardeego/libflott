@@ -28,6 +28,7 @@ typedef struct flott_user_stop_sequence flott_user_stop_sequence;
 struct flott_user_stop_sequence
 {
   flott_uint offset;
+  flott_token *boundary_token;
   double t_complexity;
 };
 

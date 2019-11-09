@@ -107,7 +107,7 @@ flott_nti_dist (flott_object *op, double *nti_dist)
 }
 
 void
-flott_ntc_dist_step (flott_object *op, const flott_uint level,
+flott_ntc_dist_step(flott_object *op, flott_token* cp_last, const flott_uint level,
                    const size_t cf_value, const size_t cp_start_offset,
                    const size_t cp_length, const size_t joined_cp_length,
                    const double t_complexity, int *terminate)
@@ -116,6 +116,7 @@ flott_ntc_dist_step (flott_object *op, const flott_uint level,
                             (flott_user_stop_sequence *) (op->user);
   if (cp_start_offset <= stop_sequence->offset)
     {
+
       stop_sequence->t_complexity = t_complexity;// - log(cf_value + 1) / log(2.0);
       op->handler.step = NULL;
     }
@@ -156,30 +157,34 @@ flott_ntc_dist (flott_object *op, double *ntc_dist)
           op->input.sequence.member[0] = 1;
           op->input.sequence.member[1] = 2;
           op->input.sequence.member[2] = 0;
-          stop_sequence.offset = op->input.source[0].length;
+          stop_sequence.offset = op->input.source[1].length;
           if ((ret_val = flott_initialize (op)) == FLOTT_SUCCESS)
             {
               op->user = (void *) &stop_sequence;
               op->handler.step = &flott_ntc_dist_step;
               flott_t_transform_callback (op);
-              t_complexity_a = stop_sequence.t_complexity;
-              t_complexity_bga = op->result.t_complexity - t_complexity_a;
+              t_complexity_a = stop_sequence.t_complexity - 1;
+              t_complexity_bga = op->result.t_complexity - stop_sequence.t_complexity;
             }
 
           op->input.sequence.member[0] = 0;
           op->input.sequence.member[2] = 1;
-          stop_sequence.offset = op->input.source[1].length;
+          stop_sequence.offset = op->input.source[0].length;
           op->user = user;
           if ((ret_val = flott_initialize (op)) == FLOTT_SUCCESS)
             {
               op->user = (void*) &stop_sequence;
               op->handler.step = &flott_ntc_dist_step;
               flott_t_transform_callback (op);
-              t_complexity_b = stop_sequence.t_complexity;
-              t_complexity_agb = op->result.t_complexity - t_complexity_b;
+              t_complexity_b = stop_sequence.t_complexity - 1;
+              t_complexity_agb = op->result.t_complexity - stop_sequence.t_complexity;
 
               *ntc_dist = flott_max_M(t_complexity_agb, t_complexity_bga)
                           / flott_max_M(t_complexity_a, t_complexity_b);
+			  
+              // clamp floating point precision errors
+              *ntc_dist = flott_min_M(*ntc_dist, 1.0);
+              *ntc_dist = flott_max_M(*ntc_dist, 0.0);
             }
         }
       else

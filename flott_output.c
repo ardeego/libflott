@@ -79,7 +79,7 @@ const static char* flott_col_label_G[FLOTT_OUT_ORD_SZ] =
   "t-{e}",   ///< average t-entropy rate
   "t-{r}",   ///< instantaneous t-entropy rate
   "p",        ///< copy pattern string
-  "t-{nid}"  ///< normalized t-information distance
+  "t-{dist}"  ///< normalized t-information distance
 };
 
 int
@@ -124,7 +124,7 @@ flott_output_initialize (flott_object *op)
   int line_length, i;
   char column_separator[2] = "";
   char column_format[FLOTT_COLFORM_BUFSZ];
-  flott_private *private = &(op->private);
+  flott_private *_private = &(op->_private);
   flott_user_output *output = (flott_user_output *) (op->user);
 
   output->previous_t_information = 0.0;
@@ -132,7 +132,7 @@ flott_output_initialize (flott_object *op)
   output->scale_factor = 1.0;
   if (flott_bitset_M (output->options, FLOTT_OUT_UNITS_BITS))
     {
-      output->scale_factor = private->ln2;
+      output->scale_factor = _private->ln2;
     }
 
   *(output->column_header) = '\0';
@@ -263,7 +263,7 @@ void flott_output_print_headers (const flott_object *op)
   flott_user_output *output = (flott_user_output *) (op->user);
   if (flott_bitset_M (output->options, FLOTT_OUT_HEADERS))
     {
-      if (output->column_header != NULL && output->handle != NULL)
+      if (*(output->column_header) != '\0' && output->handle != NULL)
         {
           fprintf (output->handle, "%s\n", output->column_header);
         }
@@ -342,7 +342,7 @@ void flott_output_no_rate (flott_object *op)
 }
 
 void
-flott_output_step (flott_object *op, const flott_uint level,
+flott_output_step (flott_object *op, flott_token* cp_last, const flott_uint level,
                    const size_t cf_value, const size_t cp_start_offset,
                    const size_t cp_length, const size_t joined_cp_length,
                    const double t_complexity, int *terminate)
@@ -369,7 +369,7 @@ flott_output_step (flott_object *op, const flott_uint level,
           flott_get_t_information (t_complexity) / output->scale_factor;
 
       t_entropy =
-          t_information / ( (op->private.token_list.length - cp_start_offset)
+          t_information / ( (op->_private.token_list.length - cp_start_offset)
                            + (joined_cp_length - cp_length) + 1 );
       t_inst_entropy =
           (t_information - output->previous_t_information) / joined_cp_length;
